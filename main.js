@@ -1,6 +1,9 @@
 import * as monaco from 'monaco-editor';
 import { loadSettings, saveSettings, checkStatus } from './ollama.js';
+import { shouldTrigger, isTypingFast } from './trigger.js';
+
 const editorEl = document.getElementById('editor');
+
 const editor = monaco.editor.create(editorEl, {
   value: 'package main\n\nfunc main() {\n\t\n}\n',
   language: 'go',
@@ -24,6 +27,31 @@ const editor = monaco.editor.create(editorEl, {
   hover: { enabled: false },
   formatOnType: false,
   renderWhitespace: 'selection',
+});
+
+let triggerTimer = null;
+editor.onDidChangeModelContent(() => {
+  if (isTypingFast()) {
+    clearTimeout(triggerTimer);
+    return;
+  }
+  const pos = editor.getPosition();
+  if (!pos) return;
+  const model = editor.getModel();
+  const lineContent = model.getLineContent(pos.lineNumber);
+  const column = pos.column;
+  const trimmed = lineContent.replace(/\s+$/, '');
+  let delay = 300;
+  if (/(?:^|\s)(func|struct|interface)\b$/.test(trimmed)) delay = 150;
+  clearTimeout(triggerTimer);
+  triggerTimer = setTimeout(() => {
+    const cur = editor.getPosition();
+    if (!cur || cur.lineNumber !== pos.lineNumber) return;
+    if (shouldTrigger(lineContent, column)) {
+      console.log('[Trigger]', lineContent);
+      // Phase 5: call Ollama here
+    }
+  }, delay);
 });
 
 editorEl.classList.add('loaded');
