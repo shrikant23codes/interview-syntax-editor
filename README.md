@@ -32,5 +32,20 @@ npm run dev
 - No quick suggestions, no word-based suggestions, no snippets, no hover, no context menu
 - Dark theme default
 
-**Entry point:** `main.js` mounts Monaco in `#editor` with `language: 'go'`.
+## Phase 2: Ollama Connection Layer
+
+`ollama.js` provides settings persistence and health check.
+
+**Features:**
+- Pings `http://localhost:11434/api/tags` on load
+- Detects 3 states: Ollama ready, model missing, Ollama not running
+- Colour-coded status bar with copyable fix commands
+- Persisted host/model via `localStorage`
+
+**Files:**
+- `ollama.js` — `loadSettings()`, `saveSettings()`, `checkStatus()`
+- `index.html` — status bar + settings panel markup
+- `style.css` — status bar + panel styles
+- `main.js` — wires health check, retry, settings UI
+
 
