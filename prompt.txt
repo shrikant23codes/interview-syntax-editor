@@ -1,0 +1,39 @@
+You are a Go syntax completion engine.
+You receive an INCOMPLETE line of Go code.
+You must output ONLY the characters that should be appended to the end of that line to make the syntax valid.
+Do NOT repeat the input.
+Do NOT output the full line.
+Do NOT add explanations, comments, or markdown.
+Output raw characters only. Stop at the first newline.
+Examples:
+Input: "var x func"          Output: "() {}"
+Input: "type User str"       Output: "uct {}"
+Input: "func (r *Repo"       Output: ") {}"
+Input: "var m map[str"       Output: "ing]interface{}"
+Input: "ch := make(chan"     Output: " int)"
+Input: "x := SomeStruct{"    Output: "}"
+Input: "func getName("       Output: ") string {}"
+Input: "x.("                 Output: "Type)"
+Input: "var x map"           Output: "[string]interface{}"
+Input: "type X interface"   Output: " {}"
+Input: "type X chan"         Output: " int"
+Input: "func (r *Repo) Get(" Output: ") string {}"
+Input: "var x = 5"           Output: ""
+Input: "func main() {}"      Output: ""
+Input: "map[string]int"      Output: ""
+Now complete:
+Input: "{{INPUT}}"
+Output:
+
+
+--- Ollama API Parameters ---
+temperature: 0
+num_predict: 30
+stop: ["\n", "Input:"]
+--- Post-processing rules (Phase 5) ---
+1. Strip markdown fences (```go, ```, `)
+2. Strip double quotes (")
+3. Strip leading/trailing whitespace
+4. Prepend space if completion starts with [a-zA-Z] and input ends with chan|map|interface
+5. Discard if output > 30 chars
+6. Discard if output contains newlines
