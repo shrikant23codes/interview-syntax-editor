@@ -1,0 +1,26 @@
+import * as monaco from 'monaco-editor';
+const editor = monaco.editor.create(document.getElementById('editor'), {
+  value: 'package main\n\nfunc main() {\n\t\n}\n',
+  language: 'go',
+  theme: 'vs-dark',
+  fontFamily: 'JetBrains Mono, monospace',
+  fontSize: 14,
+  tabSize: 4,
+  insertSpaces: false,
+  lineNumbers: 'on',
+  minimap: { enabled: false },
+  wordWrap: 'off',
+  quickSuggestions: false,
+  parameterHints: { enabled: false },
+  suggestOnTriggerCharacters: false,
+  snippetSuggestions: 'none',
+  wordBasedSuggestions: 'off',
+  contextmenu: false,
+  automaticLayout: true,
+  scrollBeyondLastLine: false,
+  fixedOverflowWidgets: true,
+  hover: { enabled: false },
+  formatOnType: false,
+  renderWhitespace: 'selection',
+});
+document.getElementById('editor').classList.add('loaded');
